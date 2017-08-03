@@ -1,0 +1,302 @@
+<html>
+<head>
+    <title> Arduino Commands </title>
+</head>
+
+<!--3Duf Dependencies-->
+<meta charset="utf-8">
+`
+<script src="../public/lib/nouislider/nouislider.min.js"></script>
+<script src="../public/lib/paper/paper-full.min.js"></script>
+<script src="../public/lib/filesaver/FileSaver.min.js"></script>
+<script src="../public/lib/three/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<!--
+This is for the ValveCommand functions
+-->
+<script src="../public/javascripts/ValveCommands.js"></script>
+
+<link rel="stylesheet" href="../public/lib/nouislider/nouislider.min.css">
+
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<!--<link rel="stylesheet" href="../public/stylesheets/modified.css">-->
+
+<!-- Bootstrap Core CSS -->
+<link href="../public/javascripts/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom CSS for Page -->
+<link href="../public/stylesheets/controlFull.css" rel="stylesheet">
+<!-- MetisMenu CSS -->
+<link href="../public/javascripts/bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+<!-- Custom CSS -->
+<link href="../public/javascripts/dist/css/sb-admin-2.css" rel="stylesheet">
+<!-- Toastr CDN -->
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<!-- Custom Fonts -->
+<link href="../public/javascripts/bower_components/font-awesome/css/font-awesome.css" rel="stylesheet" type="text/css">
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+
+<link href="https://fonts.googleapis.com/css?family=Open+Sans" rel="stylesheet">
+<script src="../public/javascripts/JSONValveDispenserLoad.js" type="application/javascript"></script>
+
+<div id="findJSON" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Upload Design Schematic </h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="json_in">Select your JSON file:</label>
+                    <input type="file" class="upload" id="JSONinput" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <!--<button type="button" class="btn btn-default" data-dismiss="modal" onclick="setNewSession();" > Start New Session </button>-->
+                <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="location.reload();"> Load  </button>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="../public/javascripts/loadControlJSON.js"></script>
+
+
+
+
+
+<link href="../public/stylesheets/controlFull.css" rel="stylesheet">
+<script type="text/javascript" src="../public/javascripts/serialcommunication.js"></script>
+<script type="text/javascript" src="../public/javascripts/ValveDispenserJSONTracking.js" > </script>
+<script type="text/javascript" src="../public/javascripts/initiate_data.js"></script>
+
+
+<!--Template for VALVES to be placed over graph canvas-->
+<template id="valve-template" action="this.preventDefault();">
+    <div class ="valve"  action="this.preventDefault();">
+        <a class="valve_marker" style="padding-left: 0px; padding-top: 0px;" action="this.preventDefault();">
+            <img class="valve_color" action="this.preventDefault();" src="Neptune-master/public/images/fluigi/valveMarkerOpen.svg" width="40" height="40">
+            <p class="IDtext" style="pointer-events: none;">beb</p>
+        </a>
+    </div>
+</template>
+
+
+<!--Template for DISPENSERS to be placed over graph canvas-->
+<template id="dispenser-template" action="this.preventDefault();">
+    <div class ="valve"  action="this.preventDefault();">
+        <a class="valve_marker" style="padding-left: 0px; padding-top: 0px;" action="this.preventDefault();">
+            <a class="catchDispenser" href=".dispenserModalClass" role="button" data-toggle="modal">
+                <img class="dispenserImg" action="this.preventDefault();" src="../public/images/fluigi/dispenseMarker.svg" width="40" height="40">
+            </a>
+            <p class="IDtext" style="pointer-events: none;">beb</p>
+        </a>
+    </div>
+    <div class="modal fade dispenserModalClass" data-backdrop="false" id="dispenserModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="margin:0 !important; width:400px;">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title" id="dispenserModalTitle">Dispenser Modal Title</h4>
+                </div>
+                <br>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <img src="../public/images/fluigi/SyringeTube.png" style="left:28px; display:block; position:relative; z-index: 2;" class="syringeTube">
+                        <img src="../public/images/fluigi/SyringePlunger.png" style="top: -36px; left: 95px; display:block; position:relative; z-index: 1;" class="syringePlunger">
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Orientation</label>
+                        <br>
+                        <div>
+                            <div class="btn-group" role="group" aria-label="../public.">
+                                <button type="button" class="btn btn-primary orientationBtn" onclick="changeDispenseOrientation(this);">pull</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <label>Current State</label>
+                        <br>
+                        <div class="currentStateModalVal">uL value</div>
+                    </div>
+
+                </div>
+                <div class="modal-body">
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">
+                        </div>
+                    </div>
+                    <form class="form-inline dispenseRate" method="POST" action="">
+                        <div class="form-group">
+                            <label for="dispenseVol">Dispense </label>
+                            <input type="text" class="form-control dispenseVol" placeholder="" style="max-width: 80px !important;">
+                        </div>
+                        <div class="form-group">
+                            <label for="dispenseTime">uL over</label>
+                            <input type="text" class="form-control dispenseTime" placeholder="" style="max-width: 80px !important;">
+                            <label> seconds.</label>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal" onclick="deactivateDispenser()">Close</button>
+                    <button type="button" class="btn btn-primary sendDispense" onclick="return sendDispense(this);">Run</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</template>
+
+
+
+
+
+
+
+<link rel="stylesheet" type="text/css" href="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"/>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+</head>
+
+<body>
+
+<body>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script src="../public/lib/nouislider/nouislider.min.js"></script>
+<script src="../public/lib/paper/paper-full.min.js"></script>
+<script src="../public/lib/filesaver/FileSaver.min.js"></script>
+<script src="../public/lib/three/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<script src="../public/javascripts/ValveCommands.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+<!--<script src="../public/javascripts/JSONValveDispenserLoad.js" type="application/javascript"></script>-->
+<!--<script type="text/javascript" src="../public/javascripts/loadControlJSON.js"></script>-->
+<script type="text/javascript" src="../public/javascripts/serialcommunication.js"></script>
+<!--<script type="text/javascript" src="../public/javascripts/ValveDispenserJSONTracking.js" > </script>-->
+<script type="text/javascript" src="../public/javascripts/initiate_data.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="../public/javascripts/ControlSettingsModal.js" type="application/javascript"></script>
+<!--<script src="/javascripts/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/javascripts/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+<script src="/javascripts/bower_components/raphael/raphael-min.js"></script>
+<script src="/javascripts/bower_components/morrisjs/morris.min.js"></script>
+<script src="/javascripts/dist/js/sb-admin-2.js"></script>-->
+<script src="../public/javascripts/ValveCommands.js" type="application/javascript"></script>
+<script src="../public/javascripts/DispenserCommands.js" type="application/javascript"></script>
+<!--<script src="../public/javascripts/3DuFApp.js"></script>-->
+<script src="../public/javascripts/SetDispenseRate.js"></script>
+<script src="../public/javascripts/EqualFlowRateInit.js"></script>
+<!--BUTTON ICONS ON CANVAS-->
+<a data-toggle="modal" data-target="#findJSON" id="uploadToggle">
+    <i class="fa fa-folder fa-3x"></i>
+</a>
+<a onclick="drawValveTable(JSON.parse(localStorage.pumpData)); drawDispenserTable(JSON.parse(localStorage.dispenserData));" data-toggle="modal" data-target="#myModal" id="settingsToggle">
+    <i class="fa fa-cog fa-3x"></i>
+</a>
+
+<a onclick= "window.open('../public/serialcommunication')" id="serialCommToggle">
+    <i class="fa fa-usb fa-3x"></i>
+</a>
+<!--
+<a onclick= "window.open('../public/serialcommunication')" id="serialCommToggle">
+    <i class="fa fa-usb fa-3x"></i>
+</a>
+<!--./ END BUTTON ICONS ON CANVAS-->
+
+<!--BUTTON ICONS ON CANVAS-->
+<a data-toggle="modal" data-target="#findJSON" id="uploadToggle">
+    <i class="fa fa-folder fa-3x"></i>
+</a>
+
+<script> function showForm() {
+        document.getElementById("formElements").style.display = "";}></script>
+
+<a onclick="showForm();" data-toggle="modal" data-target="#myModal" id="settingsToggle"
+    >
+    <i class="fa fa-cog fa-3x"></i>
+</a>
+
+<a onclick= "window.open('../public/serialcommunication')" id="serialCommToggle">
+    <i class="fa fa-usb fa-3x"></i>
+</a>
+<!--
+<a onclick= "window.open('../public/serialcommunication')" id="serialCommToggle">
+    <i class="fa fa-usb fa-3x"></i>
+</a>
+<!--./ END BUTTON ICONS ON CANVAS-->
+
+<canvas id="c" tabindex="0" resize="true"></canvas>
+<!--This is where valves go!-->
+<div id="content"></div>
+<!--./END 3DUF CANVAS-->
+
+<!-- jQuery -->
+<script src="../public/javascripts/bower_components/jquery/dist/jquery.min.js"></script>
+<!-- Bootstrap Core JavaScript -->
+<script src="../public/javascripts/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../public/javascripts/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+<!-- Morris Charts JavaScript -->
+<script src="../public/javascripts/bower_components/raphael/raphael-min.js"></script>
+<script src="../public/javascripts/bower_components/morrisjs/morris.min.js"></script>
+<!-- Custom Theme JavaScript -->
+<script src="../public/javascripts/dist/js/sb-admin-2.js"></script>
+<!-- 3DuF JavaScript -->
+<script src="../public/javascripts/ValveCommands.js" type="application/javascript"></script>
+<script src="../public/javascripts/DispenserCommands.js" type="application/javascript"></script>
+<script src="../public/javascripts/3DuFApp.js"></script>
+
+<script src="../public/javascripts/SetDispenseRate.js"></script>
+
+<!--JavaScript for Hardware Initializations-->
+<script src="../public/javascripts/EqualFlowRateInit.js"></script>
+
+
+</body>
+
+</html>
+
+<div id="formElements" style=display:none;" class="valvecontrol" >
+    <form id="command-form">
+        <action="/action_page.php" method="get"></action>
+        <p>
+            <label> Enter Pump Number Below </label>:<br>
+            <input type="text" name="textbox1" size="4" />
+        </p>
+        <p>
+            <label> Enter Open State Parameter Value </label>:<br>
+            <input type="text" name="textbox2" size="4" />
+        </p>
+        <p>
+            <label> Enter Closed State Parameter Value </label>:<br>
+            <input type="text" name="textbox3" size="4" />
+        </p>
+        <p>
+            <input type="checkbox" name="checkbox1"> Check This Box If Valve Is Open<br>
+        </p>
+        <p>
+            <input type="submit" value="Submit">
+        </p>
+    </form>
+    <p id="result"></p>
+    <script>
+        var form = document.getElementById('command-form');
+        form.onsubmit = function(){
+                var A = parseInt(form.textbox1.value);
+                var B = parseInt(form.textbox2.value);
+                var C = parseInt(form.textbox3.value);
+                var D = form.checkbox1.checked;
+                console.log(form.checkbox1.checked);
+                sendCommand(A,B,C,D);
+
+            }
+            </div>
+
+            <!--<input type=""button" name="re" onclick="showForm()" />-->
+
+</script>
+</body>
+</html>
+

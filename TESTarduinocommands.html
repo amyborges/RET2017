@@ -1,0 +1,73 @@
+
+<body>
+<script src="https://cdn.socket.io/socket.io-1.4.5.js"></script>
+<script src="../public/lib/nouislider/nouislider.min.js"></script>
+<script src="../public/lib/paper/paper-full.min.js"></script>
+<script src="../public/lib/filesaver/FileSaver.min.js"></script>
+<script src="../public/lib/three/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+<script src="../public/javascripts/ValveCommands.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="https://code.jquery.com/jquery-2.2.4.js" integrity="sha256-iT6Q9iMJYuQiMWNd9lDyBUStIq/8PuOW33aOqmvFpqI=" crossorigin="anonymous"></script>
+<!--<script src="../public/javascripts/JSONValveDispenserLoad.js" type="application/javascript"></script>-->
+<!--<script type="text/javascript" src="../public/javascripts/loadControlJSON.js"></script>-->
+<script type="text/javascript" src="../public/javascripts/serialcommunication.js"></script>
+<!--<script type="text/javascript" src="../public/javascripts/ValveDispenserJSONTracking.js" > </script>-->
+<script type="text/javascript" src="../public/javascripts/initiate_data.js"></script>
+<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+<script src="../public/javascripts/ControlSettingsModal.js" type="application/javascript"></script>
+<!--<script src="/javascripts/bower_components/jquery/dist/jquery.min.js"></script>
+<script src="/javascripts/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="/javascripts/bower_components/metisMenu/dist/metisMenu.min.js"></script>
+<script src="/javascripts/bower_components/raphael/raphael-min.js"></script>
+<script src="/javascripts/bower_components/morrisjs/morris.min.js"></script>
+<script src="/javascripts/dist/js/sb-admin-2.js"></script>-->
+<script src="../public/javascripts/ValveCommands.js" type="application/javascript"></script>
+<script src="../public/javascripts/DispenserCommands.js" type="application/javascript"></script>
+<!--<script src="../public/javascripts/3DuFApp.js"></script>-->
+<script src="../public/javascripts/SetDispenseRate.js"></script>
+<script src="../public/javascripts/EqualFlowRateInit.js"></script>
+
+
+</body>
+
+</html>
+
+    <form id="command-form">
+        <action="/action_page.php" method="get"></action>
+        <p>
+            <label> Enter Pump Number Below </label>:<br>
+            <input type="text" name="textbox1" size="4" />
+        </p>
+        <p>
+            <label> Enter Open State Parameter Value </label>:<br>
+            <input type="text" name="textbox2" size="4" />
+        </p>
+        <p>
+            <label> Enter Closed State Parameter Value </label>:<br>
+            <input type="text" name="textbox3" size="4" />
+        </p>
+        <p>
+            <input type="checkbox" name="checkbox1"> Check This Box If Valve Is Open<br>
+        </p>
+        <p>
+            <input type="submit" value="Submit">
+        </p>
+    </form>
+    <p id="result"></p>
+    <script>
+        var form = document.getElementById('command-form');
+        form.onsubmit = function(){
+                var A = parseInt(form.textbox1.value);
+                var B = parseInt(form.textbox2.value);
+                var C = parseInt(form.textbox3.value);
+                var D = form.checkbox1.checked;
+                console.log(form.checkbox1.checked);
+                sendCommand(A,B,C,D);
+
+            }
+
+
+    </script>
+    </body>
+    </html>
